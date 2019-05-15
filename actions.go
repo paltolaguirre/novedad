@@ -16,13 +16,8 @@ import (
 
 func NovedadList(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := apiclientautenticacion.CheckTokenValido(r)
-
-	if tokenError != nil {
-		apiclientautenticacion.ErrorToken(w, tokenError)
-		return
-	} else {
-
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion)
 		automigrateTablasPrivadas(db)
 		defer db.Close()
@@ -38,12 +33,8 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := apiclientautenticacion.CheckTokenValido(r)
-
-	if tokenError != nil {
-		apiclientautenticacion.ErrorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		params := mux.Vars(r)
 		novedad_id := params["id"]
@@ -67,12 +58,8 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
 func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := apiclientautenticacion.CheckTokenValido(r)
-
-	if tokenError != nil {
-		apiclientautenticacion.ErrorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		decoder := json.NewDecoder(r.Body)
 
@@ -100,13 +87,8 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := apiclientautenticacion.CheckTokenValido(r)
-
-	if tokenError != nil {
-
-		apiclientautenticacion.ErrorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		params := mux.Vars(r)
 		//se convirtió el string en uint para poder comparar
@@ -155,13 +137,8 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := apiclientautenticacion.CheckTokenValido(r)
-
-	if tokenError != nil {
-
-		apiclientautenticacion.ErrorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		//Para obtener los parametros por la url
 		params := mux.Vars(r)
