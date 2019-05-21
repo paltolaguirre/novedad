@@ -14,12 +14,14 @@ import (
 	"github.com/xubiosueldos/novedad/structNovedad"
 )
 
+var nombreMicroservicio string = "novedad"
+
 func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
 	if tokenValido {
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		var novedades []structNovedad.Novedad
@@ -41,8 +43,8 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
 		var novedad structNovedad.Novedad //Con &var --> lo que devuelve el metodo se le asigna a la var
 
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		//gorm:auto_preload se usa para que complete todos los struct con su informacion
@@ -72,8 +74,8 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		defer r.Body.Close()
 
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		if err := db.Create(&novedad_data).Error; err != nil {
@@ -92,8 +94,8 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 		params := mux.Vars(r)
 		//se convirtió el string en uint para poder comparar
-		param_novedadid, _ := strconv.ParseUint(params["id"], 10, 64)
-		p_novedadid := uint(param_novedadid)
+		param_novedadid, _ := strconv.ParseInt(params["id"], 10, 64)
+		p_novedadid := int(param_novedadid)
 
 		if p_novedadid == 0 {
 			framework.RespondError(w, http.StatusNotFound, framework.IdParametroVacio)
@@ -116,8 +118,8 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 			novedad_data.ID = p_novedadid
 
-			db := apiclientconexionbd.ObtenerDB(tokenAutenticacion)
-			automigrateTablasPrivadas(db)
+			db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+
 			defer db.Close()
 
 			if err := db.Save(&novedad_data).Error; err != nil {
@@ -144,8 +146,8 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		novedad_id := params["id"]
 
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		//--Borrado Fisico
@@ -160,7 +162,7 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func automigrateTablasPrivadas(db *gorm.DB) {
+func AutomigrateTablasPrivadas(db *gorm.DB) {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	db.AutoMigrate(&structNovedad.Novedad{})
