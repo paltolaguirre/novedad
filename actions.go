@@ -2,30 +2,29 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strconv"
+
+	"github.com/xubiosueldos/framework/configuracion"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/xubiosueldos/autenticacion/publico"
-	"github.com/xubiosueldos/conexionBD"
+	"github.com/xubiosueldos/autenticacion/apiclientautenticacion"
+	"github.com/xubiosueldos/conexionBD/apiclientconexionbd"
 	"github.com/xubiosueldos/framework"
 	"github.com/xubiosueldos/novedad/structNovedad"
 )
 
+var nombreMicroservicio string = "novedad"
+
 func NovedadList(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := checkTokenValido(r)
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
-	if tokenError != nil {
-		errorToken(w, tokenError)
-		return
-	} else {
-
-		db := obtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
 		defer db.Close()
 
 		var novedades []structNovedad.Novedad
@@ -39,20 +38,17 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := checkTokenValido(r)
-
-	if tokenError != nil {
-		errorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		params := mux.Vars(r)
 		novedad_id := params["id"]
 
 		var novedad structNovedad.Novedad //Con &var --> lo que devuelve el metodo se le asigna a la var
 
-		db := obtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		//gorm:auto_preload se usa para que complete todos los struct con su informacion
@@ -68,12 +64,8 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
 func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := checkTokenValido(r)
-
-	if tokenError != nil {
-		errorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		decoder := json.NewDecoder(r.Body)
 
@@ -86,8 +78,9 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		defer r.Body.Close()
 
-		db := obtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		if err := db.Create(&novedad_data).Error; err != nil {
@@ -101,18 +94,13 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := checkTokenValido(r)
-
-	if tokenError != nil {
-
-		errorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		params := mux.Vars(r)
 		//se convirtió el string en uint para poder comparar
-		param_novedadid, _ := strconv.ParseUint(params["id"], 10, 64)
-		p_novedadid := uint(param_novedadid)
+		param_novedadid, _ := strconv.ParseInt(params["id"], 10, 64)
+		p_novedadid := int(param_novedadid)
 
 		if p_novedadid == 0 {
 			framework.RespondError(w, http.StatusNotFound, framework.IdParametroVacio)
@@ -135,8 +123,9 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 			novedad_data.ID = p_novedadid
 
-			db := obtenerDB(tokenAutenticacion)
-			automigrateTablasPrivadas(db)
+			versionMicroservicio := obtenerVersionNovedad()
+			db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+
 			defer db.Close()
 
 			if err := db.Save(&novedad_data).Error; err != nil {
@@ -156,20 +145,16 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 
-	tokenAutenticacion, tokenError := checkTokenValido(r)
-
-	if tokenError != nil {
-
-		errorToken(w, tokenError)
-		return
-	} else {
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
 
 		//Para obtener los parametros por la url
 		params := mux.Vars(r)
 		novedad_id := params["id"]
 
-		db := obtenerDB(tokenAutenticacion)
-		automigrateTablasPrivadas(db)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+
 		defer db.Close()
 
 		//--Borrado Fisico
@@ -184,57 +169,15 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func obtenerDB(tokenAutenticacion *publico.Security) *gorm.DB {
-
-	token := *tokenAutenticacion
-	tenant := token.Tenant
-
-	return conexionBD.ConnectBD(tenant)
-
-}
-
-func automigrateTablasPrivadas(db *gorm.DB) {
+func AutomigrateTablasPrivadas(db *gorm.DB) {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	db.AutoMigrate(&structNovedad.Novedad{})
 
 }
 
-func errorToken(w http.ResponseWriter, tokenError *publico.Error) {
-	errorToken := *tokenError
-	framework.RespondError(w, errorToken.ErrorCodigo, errorToken.ErrorNombre)
+func obtenerVersionNovedad() int {
+	configuracion := configuracion.GetInstance()
 
-}
-
-func checkTokenValido(r *http.Request) (*publico.Security, *publico.Error) {
-
-	var tokenAutenticacion *publico.Security
-	var tokenError *publico.Error
-
-	url := "http://localhost:8081/check-token"
-
-	req, _ := http.NewRequest("GET", url, nil)
-
-	header := r.Header.Get("Authorization")
-
-	req.Header.Add("Authorization", header)
-
-	res, _ := http.DefaultClient.Do(req)
-
-	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
-
-	if res.StatusCode != http.StatusBadRequest {
-
-		// tokenAutenticacion = &(TokenAutenticacion{})
-		tokenAutenticacion = new(publico.Security)
-		json.Unmarshal([]byte(string(body)), tokenAutenticacion)
-
-	} else {
-		tokenError = new(publico.Error)
-		json.Unmarshal([]byte(string(body)), tokenError)
-
-	}
-
-	return tokenAutenticacion, tokenError
+	return configuracion.Versionnovedad
 }
