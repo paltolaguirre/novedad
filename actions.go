@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/xubiosueldos/framework/configuracion"
+
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -20,7 +22,8 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
 	if tokenValido {
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -43,7 +46,8 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
 		var novedad structNovedad.Novedad //Con &var --> lo que devuelve el metodo se le asigna a la var
 
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -74,7 +78,8 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		defer r.Body.Close()
 
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -118,7 +123,8 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 			novedad_data.ID = p_novedadid
 
-			db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+			versionMicroservicio := obtenerVersionNovedad()
+			db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 			defer db.Close()
 
@@ -146,7 +152,8 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		novedad_id := params["id"]
 
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, AutomigrateTablasPrivadas)
+		versionMicroservicio := obtenerVersionNovedad()
+		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -167,4 +174,10 @@ func AutomigrateTablasPrivadas(db *gorm.DB) {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	db.AutoMigrate(&structNovedad.Novedad{})
 
+}
+
+func obtenerVersionNovedad() int {
+	configuracion := configuracion.GetInstance()
+
+	return configuracion.Versionnovedad
 }
