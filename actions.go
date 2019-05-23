@@ -164,7 +164,7 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		framework.RespondJSON(w, http.StatusOK, framework.NovedadEliminada+novedad_id)
+		framework.RespondJSON(w, http.StatusOK, framework.Novedad+novedad_id+framework.MicroservicioEliminado)
 	}
 
 }
