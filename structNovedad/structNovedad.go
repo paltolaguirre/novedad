@@ -20,5 +20,5 @@ type Novedad struct {
 	Legajo      *structLegajo.Legajo     `json:"legajo" gorm:"ForeignKey:Legajoid;association_foreignkey:ID;association_autoupdate:false"`
 	Legajoid    *int                     `json:"legajoid" sql:"type:int REFERENCES Legajo(ID)"`
 	Concepto    *structConcepto.Concepto `json:"concepto" gorm:"ForeignKey:Conceptoid;association_foreignkey:ID;association_autoupdate:false"`
-	Conceptoid  *int                     `json:"conceptoid" sql:"type:int REFERENCES Concepto(ID)"`
+	Conceptoid  *int                     `json:"conceptoid"`
 }
