@@ -37,6 +37,8 @@ github.com/gorilla/mux v1.6.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2z
 github.com/gorilla/mux v1.7.0/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/mux v1.7.1 h1:Dw4jY2nghMMRsh1ol8dv1axHkDwMQK2DHerMNJsIpJU=
 github.com/gorilla/mux v1.7.1/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
+github.com/gorilla/mux v1.7.2 h1:zoNxOV7WjqXptQOVngLmcSQgXmgk4NMz1HibBchjl/I=
+github.com/gorilla/mux v1.7.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/jinzhu/gorm v1.9.2/go.mod h1:Vla75njaFJ8clLU1W44h34PjIkijhjHIYnZxMqCdxqo=
@@ -81,6 +83,8 @@ github.com/xubiosueldos/autenticacion v0.0.0-20190522114455-98001658fdeb h1:FmLI
 github.com/xubiosueldos/autenticacion v0.0.0-20190522114455-98001658fdeb/go.mod h1:rDxNVyfzwkWUZvz4HedT1XKcurnKW5Hkc/t6/3FPQHA=
 github.com/xubiosueldos/concepto v0.0.0-20190522122732-458cf0c4fa87 h1:HhkrRwCfOH72+4/pta525ikaWyhOGZDUwj2cmdnEyzc=
 github.com/xubiosueldos/concepto v0.0.0-20190522122732-458cf0c4fa87/go.mod h1:DvQ0azPZTO88+BHnouu2mpGkEX0FaudECcfRtURFmwM=
+github.com/xubiosueldos/concepto v0.0.0-20190523131727-5ca8f6d4062d h1:HlMiulptJ60uyC+X8ZEgEoUsQesEAGAL8FgkLbUZNFk=
+github.com/xubiosueldos/concepto v0.0.0-20190523131727-5ca8f6d4062d/go.mod h1:1GZeSCW9vhK+pvUiIuNiO98tcsaEaaXeln0goSekVXs=
 github.com/xubiosueldos/conexionBD v0.0.0-20190503185834-fb2a794e1c8e h1:SYr0Lu6VKpw4ulkcLFuTvYFMGB2xIG5OjI0HSnY66nM=
 github.com/xubiosueldos/conexionBD v0.0.0-20190503185834-fb2a794e1c8e/go.mod h1:u9a4/KFVYbypj4ur2n3Js0aYn1ihcuFTEIILpaR6cfY=
 github.com/xubiosueldos/conexionBD v0.0.0-20190522110449-6c03431f8a92 h1:MOG9sdHcqlarX5rDl6e01MxqJPiRzMOMK7gfQv1mISs=
@@ -94,9 +98,13 @@ github.com/xubiosueldos/framework v0.0.0-20190522111645-0816e190bbfb h1:LyD5yobc
 github.com/xubiosueldos/framework v0.0.0-20190522111645-0816e190bbfb/go.mod h1:txPj3GVjVoZeJnObRIBrzNFVDT7baf2VEpK3kCkpDWg=
 github.com/xubiosueldos/framework v0.0.0-20190523131015-5bbfef162085 h1:NRE4q27RRzjrKnSEcZuPv4GRdAq+3J8kzEeSyJomCrA=
 github.com/xubiosueldos/framework v0.0.0-20190523131015-5bbfef162085/go.mod h1:txPj3GVjVoZeJnObRIBrzNFVDT7baf2VEpK3kCkpDWg=
+github.com/xubiosueldos/framework v0.0.0-20190523131541-5dfe865fb28f h1:jBAw9KYst8mVeY2srajJWMjptpeqj7hJRSDWYWvoTuo=
+github.com/xubiosueldos/framework v0.0.0-20190523131541-5dfe865fb28f/go.mod h1:txPj3GVjVoZeJnObRIBrzNFVDT7baf2VEpK3kCkpDWg=
 github.com/xubiosueldos/legajo v1.0.0 h1:GCrlYMgDceGIaofSBvph4JYSxF84Mc2Rj/KIHLDAZUk=
 github.com/xubiosueldos/legajo v1.0.1-0.20190522115502-3bfae7ce5ce0 h1:wJ9mp+C+FyNB/+OvBC+emjhG61ndbPceppP0G/VI4sE=
 github.com/xubiosueldos/legajo v1.0.1-0.20190522115502-3bfae7ce5ce0/go.mod h1:phFL9KHzmYIetm4QPMnF4VQGA1ILZVzn+ofLCZEi1VI=
+github.com/xubiosueldos/legajo v1.0.1-0.20190523162457-9ac4f8086bc3 h1:rRCXySIEsNOFnWOOGDwCQvPh3O2z+6HpDRlqNAUJh+c=
+github.com/xubiosueldos/legajo v1.0.1-0.20190523162457-9ac4f8086bc3/go.mod h1:r5lon+c2+GoOE7a33rX9aAudqy/6F5gv0a+Wsx2PsLI=
 go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=
 golang.org/x/crypto v0.0.0-20180904163835-0709b304e793/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
