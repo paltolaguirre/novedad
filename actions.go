@@ -2,8 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"strconv"
+
+	"github.com/xubiosueldos/concepto/structConcepto"
 
 	"github.com/xubiosueldos/framework/configuracion"
 
@@ -56,9 +59,35 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 			framework.RespondError(w, http.StatusNotFound, err.Error())
 			return
 		}
-
+		concepto := obtenerConcepto(*novedad.Conceptoid, r)
+		novedad.Concepto = concepto
 		framework.RespondJSON(w, http.StatusOK, novedad)
 	}
+
+}
+
+func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
+
+	var concepto structConcepto.Concepto
+
+	url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	header := r.Header.Get("Authorization")
+
+	req.Header.Add("Authorization", header)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	str := string(body)
+
+	json.Unmarshal([]byte(str), &concepto)
+
+	return &concepto
 
 }
 
@@ -98,7 +127,7 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 	if tokenValido {
 
 		params := mux.Vars(r)
-		//se convirtió el string en uint para poder comparar
+		//se convirtió el string en int para poder comparar
 		param_novedadid, _ := strconv.ParseInt(params["id"], 10, 64)
 		p_novedadid := int(param_novedadid)
 
