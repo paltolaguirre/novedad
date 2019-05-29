@@ -69,8 +69,14 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	var concepto structConcepto.Concepto
+	config := configuracion.GetInstance()
+	puerto := config.Puertomicroservicio
+	if puerto == "" {
+		puerto = config.Puertomicroserivicioconcepto
+	}
+	url := configuracion.GetUrlMicroservicio(puerto) + strconv.Itoa(conceptoid)
 
-	url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
+	//url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
 
 	req, _ := http.NewRequest("GET", url, nil)
 
