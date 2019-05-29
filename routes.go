@@ -30,31 +30,31 @@ var routes = Routes{
 	Route{
 		"NovedadList",
 		"GET",
-		"/novedades",
+		"/api/novedad/novedades",
 		NovedadList,
 	},
 	Route{
 		"NovedadShow",
 		"GET",
-		"/novedades/{id}",
+		"/api/novedad/novedades/{id}",
 		NovedadShow,
 	},
 	Route{
 		"NovedadAdd",
 		"POST",
-		"/novedades",
+		"/api/novedad/novedades",
 		NovedadAdd,
 	},
 	Route{
 		"NovedadUpdate",
 		"PUT",
-		"/novedades/{id}",
+		"/api/novedad/novedades/{id}",
 		NovedadUpdate,
 	},
 	Route{
 		"NovedadRemove",
 		"DELETE",
-		"/novedades/{id}",
+		"/api/novedad/novedades/{id}",
 		NovedadRemove,
 	},
 }
