@@ -69,8 +69,14 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	var concepto structConcepto.Concepto
+	config := configuracion.GetInstance()
+	puerto := config.Puertomicroservicio
+	if puerto == "" {
+		puerto = config.Puertomicroserivicioconcepto
+	}
+	url := configuracion.GetUrlMicroservicio(puerto) + "concepto/conceptos/" + strconv.Itoa(conceptoid)
 
-	url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
+	//url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
 
 	req, _ := http.NewRequest("GET", url, nil)
 
@@ -78,8 +84,12 @@ func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	req.Header.Add("Authorization", header)
 
-	res, _ := http.DefaultClient.Do(req)
-
+	//res, _ := http.DefaultClient.Do(req)
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 
