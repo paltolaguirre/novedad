@@ -72,7 +72,7 @@ func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	config := configuracion.GetInstance()
 
-	url := configuracion.GetUrlMicroservicio(config.Puertomicroservicionovedad) + "concepto/conceptos/" + strconv.Itoa(conceptoid)
+	url := configuracion.GetUrlMicroservicio(config.Puertomicroservicioconcepto) + "concepto/conceptos/" + strconv.Itoa(conceptoid)
 
 	//url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
 
