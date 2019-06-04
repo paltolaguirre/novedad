@@ -11,7 +11,7 @@ func main() {
 	configuracion := configuracion.GetInstance()
 	router := newRouter()
 
-	server := http.ListenAndServe(":"+configuracion.Puertomicroserivicionovedad, router)
+	server := http.ListenAndServe(":"+configuracion.Puertomicroservicionovedad, router)
 
 	log.Fatal(server)
 

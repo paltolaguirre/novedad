@@ -1,8 +1,11 @@
 package main
 
 import (
+	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -69,12 +72,10 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	var concepto structConcepto.Concepto
+
 	config := configuracion.GetInstance()
-	puerto := config.Puertomicroservicio
-	if puerto == "" {
-		puerto = config.Puertomicroserivicioconcepto
-	}
-	url := configuracion.GetUrlMicroservicio(puerto) + "concepto/conceptos/" + strconv.Itoa(conceptoid)
+
+	url := configuracion.GetUrlMicroservicio(config.Puertomicroservicioconcepto) + "concepto/conceptos/" + strconv.Itoa(conceptoid)
 
 	//url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
 
@@ -84,14 +85,21 @@ func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	req.Header.Add("Authorization", header)
 
-	//res, _ := http.DefaultClient.Do(req)
-	client := &http.Client{}
-	res, err := client.Do(req)
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	res, err := http.DefaultClient.Do(req)
+
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
+
+	fmt.Println("URL:", url)
+
 	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Panic(err)
+	}
 
 	str := string(body)
 
