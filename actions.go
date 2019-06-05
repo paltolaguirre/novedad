@@ -24,6 +24,11 @@ import (
 
 var nombreMicroservicio string = "novedad"
 
+// Sirve para controlar si el server esta OK
+func Healthy(writer http.ResponseWriter, request *http.Request) {
+	writer.Write([]byte("Healthy"))
+}
+
 func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
