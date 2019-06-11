@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -34,7 +33,9 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
 	if tokenValido {
 		versionMicroservicio := obtenerVersionNovedad()
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -58,7 +59,9 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 		var novedad structNovedad.Novedad //Con &var --> lo que devuelve el metodo se le asigna a la var
 
 		versionMicroservicio := obtenerVersionNovedad()
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -84,17 +87,22 @@ func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 
 	//url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
 
-	req, _ := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", url, nil)
+
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
 
 	header := r.Header.Get("Authorization")
 
 	req.Header.Add("Authorization", header)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
 	res, err := http.DefaultClient.Do(req)
 
 	if err != nil {
-		log.Panic(err)
+		fmt.Println("Error: ", err)
 	}
 
 	fmt.Println("URL:", url)
@@ -102,8 +110,9 @@ func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
+
 	if err != nil {
-		log.Panic(err)
+		fmt.Println("Error: ", err)
 	}
 
 	str := string(body)
@@ -131,7 +140,9 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
 		versionMicroservicio := obtenerVersionNovedad()
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
@@ -176,7 +187,9 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 			novedad_data.ID = p_novedadid
 
 			versionMicroservicio := obtenerVersionNovedad()
-			db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+			tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+
+			db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 			defer db.Close()
 
@@ -205,7 +218,9 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 		novedad_id := params["id"]
 
 		versionMicroservicio := obtenerVersionNovedad()
-		db := apiclientconexionbd.ObtenerDB(tokenAutenticacion, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
 		defer db.Close()
 
