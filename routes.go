@@ -30,7 +30,7 @@ var routes = Routes{
 	Route{
 		"Healthy",
 		"GET",
-		"/api/concepto/healthy",
+		"/api/novedad/healthy",
 		Healthy,
 	},
 	Route{
