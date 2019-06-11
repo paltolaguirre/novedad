@@ -14,7 +14,7 @@ type Novedad struct {
 	Codigo      string                   `json:"codigo"`
 	Descripcion string                   `json:"descripcion"`
 	Activo      int                      `json:"activo"`
-	Importe     float32                  `json:"importe"`
+	Importe     float32                  `json:"importe" sql:"type:decimal(19,4);"`
 	Cantidad    int                      `json:"cantidad"`
 	Fecha       time.Time                `json:"fecha"`
 	Legajo      *structLegajo.Legajo     `json:"legajo" gorm:"ForeignKey:Legajoid;association_foreignkey:ID;association_autoupdate:false"`
