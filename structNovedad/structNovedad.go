@@ -14,11 +14,11 @@ type Novedad struct {
 	Codigo      string                   `json:"codigo"`
 	Descripcion string                   `json:"descripcion"`
 	Activo      int                      `json:"activo"`
-	Importe     float32                  `json:"importe"`
-	Cantidad    int                      `json:"cantidad"`
-	Fecha       time.Time                `json:"fecha"`
-	Legajo      *structLegajo.Legajo     `json:"legajo" gorm:"ForeignKey:Legajoid;association_foreignkey:ID;association_autoupdate:false"`
-	Legajoid    *int                     `json:"legajoid" sql:"type:int REFERENCES Legajo(ID)"`
-	Concepto    *structConcepto.Concepto `json:"concepto" gorm:"ForeignKey:Conceptoid;association_foreignkey:ID;association_autoupdate:false"`
-	Conceptoid  *int                     `json:"conceptoid"`
+	Importe     float32                  `json:"importe" sql:"type:decimal(19,4);"`
+	Cantidad    *int                     `json:"cantidad" gorm:"not null"`
+	Fecha       *time.Time               `json:"fecha" gorm:"not null"`
+	Legajo      *structLegajo.Legajo     `json:"legajo" gorm:"ForeignKey:Legajoid;association_foreignkey:ID;association_autoupdate:false;not null"`
+	Legajoid    *int                     `json:"legajoid" sql:"type:int REFERENCES Legajo(ID)" gorm:"not null"`
+	Concepto    *structConcepto.Concepto `json:"concepto" gorm:"ForeignKey:Conceptoid;association_foreignkey:ID;association_autoupdate:false;not null"`
+	Conceptoid  *int                     `json:"conceptoid" gorm:"not null"`
 }

@@ -39,7 +39,8 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
-		defer db.Close()
+		//defer db.Close()
+		defer apiclientconexionbd.CerrarDB(db)
 
 		var novedades []structNovedadMin.Novedad
 
@@ -70,7 +71,8 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
-		defer db.Close()
+		//defer db.Close()
+		defer apiclientconexionbd.CerrarDB(db)
 
 		//gorm:auto_preload se usa para que complete todos los struct con su informacion
 		if err := db.Set("gorm:auto_preload", true).First(&novedad, "id = ?", novedad_id).Error; gorm.IsRecordNotFoundError(err) {
@@ -151,7 +153,8 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
-		defer db.Close()
+		//defer db.Close()
+		defer apiclientconexionbd.CerrarDB(db)
 
 		if err := db.Create(&novedad_data).Error; err != nil {
 			framework.RespondError(w, http.StatusInternalServerError, err.Error())
@@ -198,7 +201,8 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 			db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
-			defer db.Close()
+			//defer db.Close()
+			defer apiclientconexionbd.CerrarDB(db)
 
 			if err := db.Save(&novedad_data).Error; err != nil {
 				framework.RespondError(w, http.StatusInternalServerError, err.Error())
@@ -229,7 +233,8 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
 
-		defer db.Close()
+		//defer db.Close()
+		defer apiclientconexionbd.CerrarDB(db)
 
 		//--Borrado Fisico
 		if err := db.Unscoped().Where("id = ?", novedad_id).Delete(structNovedad.Novedad{}).Error; err != nil {
