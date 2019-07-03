@@ -19,6 +19,8 @@ import (
 	"github.com/xubiosueldos/conexionBD/apiclientconexionbd"
 	"github.com/xubiosueldos/framework"
 	"github.com/xubiosueldos/novedad/structNovedad"
+	"github.com/xubiosueldos/novedad/structNovedadMin"
+	_ "github.com/xubiosueldos/novedad/structNovedadMin"
 )
 
 var nombreMicroservicio string = "novedad"
@@ -39,9 +41,14 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 		defer db.Close()
 
-		var novedades []structNovedad.Novedad
+		var novedades []structNovedadMin.Novedad
 
-		db.Find(&novedades)
+		db.Set("gorm:auto_preload", true).Find(&novedades)
+
+		for i, novedad := range novedades {
+			concepto := obtenerConcepto(*novedad.Conceptoid, r)
+			novedades[i].Concepto = concepto
+		}
 
 		framework.RespondJSON(w, http.StatusOK, novedades)
 	}
