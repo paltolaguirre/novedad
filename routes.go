@@ -28,6 +28,12 @@ func newRouter() *mux.Router {
 
 var routes = Routes{
 	Route{
+		"Healthy",
+		"GET",
+		"/api/novedad/healthy",
+		Healthy,
+	},
+	Route{
 		"NovedadList",
 		"GET",
 		"/api/novedad/novedades",
