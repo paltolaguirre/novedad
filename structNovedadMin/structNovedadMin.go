@@ -24,5 +24,7 @@ type Novedad struct {
 
 type Legajo struct {
 	structGormModel.GormModel
-	Nombre string `json:"nombre"`
+	Nombre   string `json:"nombre"`
+	Legajo   string `json:"legajo"`
+	Apellido string `json:"apellido"`
 }
