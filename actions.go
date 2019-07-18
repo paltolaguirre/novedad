@@ -23,6 +23,10 @@ import (
 	_ "github.com/xubiosueldos/novedad/structNovedadMin"
 )
 
+type IdsAEliminar struct {
+	Ids []int `json:"ids"`
+}
+
 var nombreMicroservicio string = "novedad"
 
 // Sirve para controlar si el server esta OK
@@ -244,6 +248,46 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 		}
 
 		framework.RespondJSON(w, http.StatusOK, framework.Novedad+novedad_id+framework.MicroservicioEliminado)
+	}
+
+}
+
+func NovedadesRemoveMasivo(w http.ResponseWriter, r *http.Request) {
+	var resultadoDeEliminacion = make(map[int]string)
+	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
+	if tokenValido {
+
+		var idsEliminar IdsAEliminar
+		decoder := json.NewDecoder(r.Body)
+
+		if err := decoder.Decode(&idsEliminar); err != nil {
+			framework.RespondError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		versionMicroservicio := obtenerVersionNovedad()
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+
+		defer apiclientconexionbd.CerrarDB(db)
+
+		if len(idsEliminar.Ids) > 0 {
+			for i := 0; i < len(idsEliminar.Ids); i++ {
+				novedad_id := idsEliminar.Ids[i]
+				if err := db.Unscoped().Where("id = ?", novedad_id).Delete(structNovedad.Novedad{}).Error; err != nil {
+					//framework.RespondError(w, http.StatusInternalServerError, err.Error())
+					resultadoDeEliminacion[novedad_id] = string(err.Error())
+
+				} else {
+					resultadoDeEliminacion[novedad_id] = "Fue eliminado con exito"
+				}
+			}
+		} else {
+			framework.RespondError(w, http.StatusInternalServerError, "Seleccione por lo menos un registro")
+		}
+
+		framework.RespondJSON(w, http.StatusOK, resultadoDeEliminacion)
 	}
 
 }

@@ -63,4 +63,10 @@ var routes = Routes{
 		"/api/novedad/novedades/{id}",
 		NovedadRemove,
 	},
+	Route{
+		"NovedadesRemoveMasivo",
+		"DELETE",
+		"/api/novedad/novedades",
+		NovedadesRemoveMasivo,
+	},
 }
