@@ -36,6 +36,8 @@ func Healthy(writer http.ResponseWriter, request *http.Request) {
 
 func NovedadList(w http.ResponseWriter, r *http.Request) {
 
+	var legajoid = r.URL.Query()["legajoid"]
+
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
 	if tokenValido {
 		versionMicroservicio := obtenerVersionNovedad()
@@ -48,7 +50,11 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 		var novedades []structNovedadMin.Novedad
 
-		db.Set("gorm:auto_preload", true).Find(&novedades)
+		if legajoid != nil {
+			db.Set("gorm:auto_preload", true).Where("legajoid = ?", legajoid).Find(&novedades)
+		} else {
+			db.Set("gorm:auto_preload", true).Find(&novedades)
+		}
 
 		for i, novedad := range novedades {
 			concepto := obtenerConcepto(*novedad.Conceptoid, r)
