@@ -1,14 +1,9 @@
 package main
 
 import (
-	"crypto/tls"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strconv"
-
-	"github.com/xubiosueldos/concepto/structConcepto"
 
 	"github.com/xubiosueldos/framework/configuracion"
 
@@ -56,11 +51,6 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 			db.Set("gorm:auto_preload", true).Find(&novedades)
 		}
 
-		for i, novedad := range novedades {
-			concepto := obtenerConcepto(*novedad.Conceptoid, r)
-			novedades[i].Concepto = concepto
-		}
-
 		framework.RespondJSON(w, http.StatusOK, novedades)
 	}
 
@@ -89,56 +79,9 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 			framework.RespondError(w, http.StatusNotFound, err.Error())
 			return
 		}
-		concepto := obtenerConcepto(*novedad.Conceptoid, r)
-		novedad.Concepto = concepto
+
 		framework.RespondJSON(w, http.StatusOK, novedad)
 	}
-
-}
-
-func obtenerConcepto(conceptoid int, r *http.Request) *structConcepto.Concepto {
-
-	var concepto structConcepto.Concepto
-
-	config := configuracion.GetInstance()
-
-	url := configuracion.GetUrlMicroservicio(config.Puertomicroservicioconcepto) + "concepto/conceptos/" + strconv.Itoa(conceptoid)
-
-	//url := "http://localhost:8084/conceptos/" + strconv.Itoa(conceptoid)
-
-	req, err := http.NewRequest("GET", url, nil)
-
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
-
-	header := r.Header.Get("Authorization")
-
-	req.Header.Add("Authorization", header)
-
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-
-	res, err := http.DefaultClient.Do(req)
-
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
-
-	fmt.Println("URL:", url)
-
-	defer res.Body.Close()
-
-	body, err := ioutil.ReadAll(res.Body)
-
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
-
-	str := string(body)
-
-	json.Unmarshal([]byte(str), &concepto)
-
-	return &concepto
 
 }
 
