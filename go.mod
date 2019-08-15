@@ -9,5 +9,5 @@ require (
 	github.com/xubiosueldos/concepto v0.0.0-20190813132225-cee73d332f93
 	github.com/xubiosueldos/conexionBD v0.0.0-20190813131708-bba814aa55fb
 	github.com/xubiosueldos/framework v0.0.0-20190813125641-bb1718a07434
-	github.com/xubiosueldos/legajo v1.0.1-0.20190813133318-0ac051b3c42a
+	github.com/xubiosueldos/legajo v1.0.1-0.20190815175426-80a2bfc03b30
 )

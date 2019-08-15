@@ -208,6 +208,8 @@ github.com/xubiosueldos/legajo v1.0.1-0.20190812153758-ea4887277240 h1:JQleKYfcH
 github.com/xubiosueldos/legajo v1.0.1-0.20190812153758-ea4887277240/go.mod h1:4uSKstJZjiwqqlY+EEnnHMtT757i1n00zs/5d6Iud9Q=
 github.com/xubiosueldos/legajo v1.0.1-0.20190813133318-0ac051b3c42a h1:YbW7eOnrh0s/SM63Zzd4RzlKoJxIC1K2ciMIfeBwg9A=
 github.com/xubiosueldos/legajo v1.0.1-0.20190813133318-0ac051b3c42a/go.mod h1:nF68Bx650yALQu1yF3Ps6xaiMGS+Wqf6qTboLIeZCq8=
+github.com/xubiosueldos/legajo v1.0.1-0.20190815175426-80a2bfc03b30 h1:3u0SlDw62yS+KfLWUDWmlYcdPDeuPaj9Ijb6aFCwngU=
+github.com/xubiosueldos/legajo v1.0.1-0.20190815175426-80a2bfc03b30/go.mod h1:nF68Bx650yALQu1yF3Ps6xaiMGS+Wqf6qTboLIeZCq8=
 go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=
 golang.org/x/crypto v0.0.0-20180904163835-0709b304e793/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
