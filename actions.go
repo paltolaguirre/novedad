@@ -11,9 +11,9 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/xubiosueldos/autenticacion/apiclientautenticacion"
+	"github.com/xubiosueldos/conexionBD/Novedad/structNovedad"
 	"github.com/xubiosueldos/conexionBD/apiclientconexionbd"
 	"github.com/xubiosueldos/framework"
-	"github.com/xubiosueldos/novedad/structNovedad"
 	"github.com/xubiosueldos/novedad/structNovedadMin"
 	_ "github.com/xubiosueldos/novedad/structNovedadMin"
 )
@@ -38,7 +38,7 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 		versionMicroservicio := obtenerVersionNovedad()
 		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
 		//defer db.Close()
 		defer apiclientconexionbd.CerrarDB(db)
@@ -69,7 +69,7 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 		versionMicroservicio := obtenerVersionNovedad()
 		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
 		//defer db.Close()
 		defer apiclientconexionbd.CerrarDB(db)
@@ -104,7 +104,7 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 		versionMicroservicio := obtenerVersionNovedad()
 		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
 		//defer db.Close()
 		defer apiclientconexionbd.CerrarDB(db)
@@ -152,7 +152,7 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 			versionMicroservicio := obtenerVersionNovedad()
 			tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-			db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+			db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
 			//defer db.Close()
 			defer apiclientconexionbd.CerrarDB(db)
@@ -184,7 +184,7 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 		versionMicroservicio := obtenerVersionNovedad()
 		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
 		//defer db.Close()
 		defer apiclientconexionbd.CerrarDB(db)
@@ -217,7 +217,7 @@ func NovedadesRemoveMasivo(w http.ResponseWriter, r *http.Request) {
 		versionMicroservicio := obtenerVersionNovedad()
 		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio, AutomigrateTablasPrivadas)
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
 		defer apiclientconexionbd.CerrarDB(db)
 
@@ -238,13 +238,6 @@ func NovedadesRemoveMasivo(w http.ResponseWriter, r *http.Request) {
 
 		framework.RespondJSON(w, http.StatusOK, resultadoDeEliminacion)
 	}
-
-}
-
-func AutomigrateTablasPrivadas(db *gorm.DB) {
-
-	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	db.AutoMigrate(&structNovedad.Novedad{})
 
 }
 
