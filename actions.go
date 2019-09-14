@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/xubiosueldos/framework/configuracion"
-
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -35,12 +33,14 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
 	if tokenValido {
-		versionMicroservicio := obtenerVersionNovedad()
-		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
+		/*versionMicroservicio := obtenerVersionNovedad()
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
-		//defer db.Close()
+		//defer db.Close()*/
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+		db := apiclientconexionbd.ObtenerDB(tenant)
+
 		defer apiclientconexionbd.CerrarDB(db)
 
 		var novedades []structNovedadMin.Novedad
@@ -66,12 +66,13 @@ func NovedadShow(w http.ResponseWriter, r *http.Request) {
 
 		var novedad structNovedad.Novedad //Con &var --> lo que devuelve el metodo se le asigna a la var
 
-		versionMicroservicio := obtenerVersionNovedad()
-		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
-
+		/*versionMicroservicio := obtenerVersionNovedad()
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
-		//defer db.Close()
+		//defer db.Close()*/
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+		db := apiclientconexionbd.ObtenerDB(tenant)
+
 		defer apiclientconexionbd.CerrarDB(db)
 
 		//gorm:auto_preload se usa para que complete todos los struct con su informacion
@@ -101,12 +102,13 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		defer r.Body.Close()
 
-		versionMicroservicio := obtenerVersionNovedad()
-		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
-
+		/*versionMicroservicio := obtenerVersionNovedad()
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
-		//defer db.Close()
+		//defer db.Close()*/
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+		db := apiclientconexionbd.ObtenerDB(tenant)
+
 		defer apiclientconexionbd.CerrarDB(db)
 
 		if err := db.Create(&novedad_data).Error; err != nil {
@@ -149,12 +151,13 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 			novedad_data.ID = p_novedadid
 
-			versionMicroservicio := obtenerVersionNovedad()
-			tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
-
+			/*versionMicroservicio := obtenerVersionNovedad()
 			db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
-			//defer db.Close()
+			//defer db.Close()*/
+			tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+			db := apiclientconexionbd.ObtenerDB(tenant)
+
 			defer apiclientconexionbd.CerrarDB(db)
 
 			if err := db.Save(&novedad_data).Error; err != nil {
@@ -181,12 +184,12 @@ func NovedadRemove(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		novedad_id := params["id"]
 
-		versionMicroservicio := obtenerVersionNovedad()
-		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
-
+		/*versionMicroservicio := obtenerVersionNovedad()
 		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
 
-		//defer db.Close()
+		//defer db.Close()*/
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+		db := apiclientconexionbd.ObtenerDB(tenant)
 		defer apiclientconexionbd.CerrarDB(db)
 
 		//--Borrado Fisico
@@ -214,10 +217,12 @@ func NovedadesRemoveMasivo(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		versionMicroservicio := obtenerVersionNovedad()
+		/*versionMicroservicio := obtenerVersionNovedad()
 		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
 
-		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)
+		db := apiclientconexionbd.ObtenerDB(tenant, nombreMicroservicio, versionMicroservicio)*/
+		tenant := apiclientautenticacion.ObtenerTenant(tokenAutenticacion)
+		db := apiclientconexionbd.ObtenerDB(tenant)
 
 		defer apiclientconexionbd.CerrarDB(db)
 
@@ -239,10 +244,4 @@ func NovedadesRemoveMasivo(w http.ResponseWriter, r *http.Request) {
 		framework.RespondJSON(w, http.StatusOK, resultadoDeEliminacion)
 	}
 
-}
-
-func obtenerVersionNovedad() int {
-	configuracion := configuracion.GetInstance()
-
-	return configuracion.Versionnovedad
 }
