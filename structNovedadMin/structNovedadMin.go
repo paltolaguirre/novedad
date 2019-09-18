@@ -3,7 +3,7 @@ package structNovedadMin
 import (
 	"time"
 
-	"github.com/xubiosueldos/concepto/structConcepto"
+	"github.com/xubiosueldos/conexionBD/Concepto/structConcepto"
 	"github.com/xubiosueldos/conexionBD/structGormModel"
 )
 
