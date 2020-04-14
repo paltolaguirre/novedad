@@ -197,6 +197,8 @@ github.com/xubiosueldos/conexionBD v0.0.0-20191030141409-feeae8a0d4df h1:TG5Nh78
 github.com/xubiosueldos/conexionBD v0.0.0-20191030141409-feeae8a0d4df/go.mod h1:jeo57E+wvI5Q21kKt/DhqL0fWzFNOuU5xlsmtO504zg=
 github.com/xubiosueldos/conexionBD v0.0.0-20191209172543-525bfbe44f3f h1:twsesKc+h6JkQbfa2htIVuPmlsWjA+u8Gcb4GaaA+A8=
 github.com/xubiosueldos/conexionBD v0.0.0-20191209172543-525bfbe44f3f/go.mod h1:jeo57E+wvI5Q21kKt/DhqL0fWzFNOuU5xlsmtO504zg=
+github.com/xubiosueldos/conexionBD v0.0.0-20200407173402-156545232f2e h1:TnlxrFZGhacBFfse9jvw6rHc1yMc8km+hnzylLS+Js0=
+github.com/xubiosueldos/conexionBD v0.0.0-20200407173402-156545232f2e/go.mod h1:HMSOQVG2yGtw7o43PspUrFkitZsTDdgJU7TGjwmeO6c=
 github.com/xubiosueldos/framework v0.0.0-20190502133422-d53dd93b5196/go.mod h1:txPj3GVjVoZeJnObRIBrzNFVDT7baf2VEpK3kCkpDWg=
 github.com/xubiosueldos/framework v0.0.0-20190509132521-6f92aa67ddd1 h1:fX9zh5Q1VyY9dQIaekRTNUla7ZS6nl5rsuTqhe+PmKs=
 github.com/xubiosueldos/framework v0.0.0-20190509132521-6f92aa67ddd1/go.mod h1:txPj3GVjVoZeJnObRIBrzNFVDT7baf2VEpK3kCkpDWg=
@@ -223,6 +225,8 @@ github.com/xubiosueldos/framework v0.0.0-20190923130327-27a81bc804ce h1:5Lxe2+4C
 github.com/xubiosueldos/framework v0.0.0-20190923130327-27a81bc804ce/go.mod h1:Atdymo+Iri+Mn8+VPhqIyb6dW/S/q3xPgobPRPBirzs=
 github.com/xubiosueldos/framework v0.0.0-20191002111857-52b12ef56c62 h1:39700bnGzWF139TDjBPFLMICs+1Tk306RVSjp1KCkEw=
 github.com/xubiosueldos/framework v0.0.0-20191002111857-52b12ef56c62/go.mod h1:YpPF+hDR5I/7906gpS7Tjz+/wJX5KJCVyUDAWXeeOds=
+github.com/xubiosueldos/framework v0.0.0-20200212144413-988f52a640e7 h1:OYQ3LDYr86ceQcn+ZMsN2Kx4PbrrosloEPWn3DKWLPE=
+github.com/xubiosueldos/framework v0.0.0-20200212144413-988f52a640e7/go.mod h1:YpPF+hDR5I/7906gpS7Tjz+/wJX5KJCVyUDAWXeeOds=
 github.com/xubiosueldos/legajo v1.0.0 h1:GCrlYMgDceGIaofSBvph4JYSxF84Mc2Rj/KIHLDAZUk=
 github.com/xubiosueldos/legajo v1.0.1-0.20190522115502-3bfae7ce5ce0 h1:wJ9mp+C+FyNB/+OvBC+emjhG61ndbPceppP0G/VI4sE=
 github.com/xubiosueldos/legajo v1.0.1-0.20190522115502-3bfae7ce5ce0/go.mod h1:phFL9KHzmYIetm4QPMnF4VQGA1ILZVzn+ofLCZEi1VI=
