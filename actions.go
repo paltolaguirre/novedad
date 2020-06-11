@@ -100,7 +100,7 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		defer conexionBD.CerrarDB(db)
 
-		err := camposObligatoriosCompletos(novedad_data, db)
+		err := camposFormatYCheckObligatoriosCompletos(&novedad_data, db)
 		if err != nil {
 			framework.RespondError(w, http.StatusBadRequest, err.Error())
 			return
@@ -115,7 +115,13 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func camposObligatoriosCompletos(novedad structNovedad.Novedad, db *gorm.DB) error {
+func camposFormatYCheckObligatoriosCompletos(novedad *structNovedad.Novedad, db *gorm.DB) error {
+
+	if novedad.Fecha == nil {
+		return errors.New("El campo fecha es obligatorio")
+	}
+
+
 	if novedad.Legajoid == nil {
 		return errors.New("El campo legajo es obligatorio")
 	}
@@ -124,6 +130,7 @@ func camposObligatoriosCompletos(novedad structNovedad.Novedad, db *gorm.DB) err
 		if novedad.Cantidad == 0 {
 			return errors.New("En conceptos con calculo automatico, la cantidad debe ser distinta de cero")
 		}
+		novedad.Importe = nil
 	} else {
 		if novedad.Importe == nil {
 			return errors.New("En conceptos sin calculo automatico, el importe total es obligatorio")
@@ -177,7 +184,7 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 
 			defer conexionBD.CerrarDB(db)
 
-			err := camposObligatoriosCompletos(novedad_data, db)
+			err := camposFormatYCheckObligatoriosCompletos(&novedad_data, db)
 			if err != nil {
 				framework.RespondError(w, http.StatusBadRequest, err.Error())
 				return
