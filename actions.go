@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
+	"github.com/xubiosueldos/conexionBD/Concepto/structConcepto"
 	"net/http"
 	"strconv"
 
@@ -98,6 +100,12 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		defer conexionBD.CerrarDB(db)
 
+		err := camposFormatYCheckObligatoriosCompletos(&novedad_data, db)
+		if err != nil {
+			framework.RespondError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
 		if err := db.Create(&novedad_data).Error; err != nil {
 			framework.RespondError(w, http.StatusInternalServerError, err.Error())
 			return
@@ -105,6 +113,39 @@ func NovedadAdd(w http.ResponseWriter, r *http.Request) {
 
 		framework.RespondJSON(w, http.StatusCreated, novedad_data)
 	}
+}
+
+func camposFormatYCheckObligatoriosCompletos(novedad *structNovedad.Novedad, db *gorm.DB) error {
+
+	if novedad.Fecha == nil {
+		return errors.New("El campo fecha es obligatorio")
+	}
+
+
+	if novedad.Legajoid == nil {
+		return errors.New("El campo legajo es obligatorio")
+	}
+
+	if conceptoConCalculoAutomatico(novedad.Conceptoid, db) {
+		if novedad.Cantidad == 0 {
+			return errors.New("En conceptos con calculo automatico, la cantidad debe ser distinta de cero")
+		}
+		novedad.Importe = nil
+	} else {
+		if novedad.Importe == nil {
+			return errors.New("En conceptos sin calculo automatico, el importe total es obligatorio")
+		}
+	}
+
+	return nil
+}
+
+func conceptoConCalculoAutomatico(conceptoid *int, db *gorm.DB) bool {
+	var concepto structConcepto.Concepto
+
+	db.First(&concepto, "id = ?", conceptoid)
+
+	return concepto.Tipocalculoautomaticoid != nil && *concepto.Tipocalculoautomaticoid == -3
 }
 
 func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
@@ -142,6 +183,12 @@ func NovedadUpdate(w http.ResponseWriter, r *http.Request) {
 			db := conexionBD.ObtenerDB(tenant)
 
 			defer conexionBD.CerrarDB(db)
+
+			err := camposFormatYCheckObligatoriosCompletos(&novedad_data, db)
+			if err != nil {
+				framework.RespondError(w, http.StatusBadRequest, err.Error())
+				return
+			}
 
 			if err := db.Save(&novedad_data).Error; err != nil {
 				framework.RespondError(w, http.StatusInternalServerError, err.Error())
