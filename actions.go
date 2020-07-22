@@ -6,6 +6,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/Concepto/structConcepto"
 	"net/http"
 	"strconv"
+	s "strings"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -32,6 +33,7 @@ func Healthy(writer http.ResponseWriter, request *http.Request) {
 func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 	var legajoid = r.URL.Query()["legajoid"]
+	var fechaperiodoliquidacion = r.URL.Query()["fechaperiodoliquidacion"]
 
 	tokenValido, tokenAutenticacion := apiclientautenticacion.CheckTokenValido(w, r)
 	if tokenValido {
@@ -43,8 +45,11 @@ func NovedadList(w http.ResponseWriter, r *http.Request) {
 
 		var novedades []structNovedadMin.Novedad
 
-		if legajoid != nil {
-			db.Set("gorm:auto_preload", true).Where("legajoid = ?", legajoid).Find(&novedades)
+		if legajoid != nil && fechaperiodoliquidacion != nil {
+			fechaliquidacion := s.Split(fechaperiodoliquidacion[0], "-")
+			anioLiquidacion := fechaliquidacion[0]
+			mesLiquidacion := fechaliquidacion[1]
+			db.Set("gorm:auto_preload", true).Where("legajoid = ? AND to_char(fecha,'YYYY') = ? AND to_char(fecha,'MM') = ?", legajoid[0], anioLiquidacion, mesLiquidacion).Find(&novedades)
 		} else {
 			db.Set("gorm:auto_preload", true).Find(&novedades)
 		}
